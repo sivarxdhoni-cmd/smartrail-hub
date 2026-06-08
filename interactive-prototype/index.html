@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith Mobile Prototype Studio & Usability Console</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- App Header -->
+    <header class="studio-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-primary">Zenith</span>
+                    <span class="logo-secondary">Prototype Studio</span>
+                </div>
+            </div>
+            <div class="header-session-status">
+                <span class="session-badge idle" id="session-status-text">Study Mode: Idle</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Studio Grid Workspace -->
+    <main class="studio-workspace">
+        <!-- LEFT COLUMN: TESTING STUDY CONTROLLER -->
+        <section class="workspace-panel controller-panel">
+            <div class="panel-header">
+                <h2>Usability Test Console</h2>
+                <p>Run validation scenarios on your clickable flows, track task execution speeds, and capture UX friction metrics.</p>
+            </div>
+
+            <!-- Testing Actions -->
+            <div class="study-actions">
+                <button class="action-btn-primary" id="study-control-btn" onclick="toggleStudySession()">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" class="btn-icon"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Start Testing Session
+                </button>
+                <button class="action-btn-ghost" id="study-reset-btn" onclick="resetStudySession()" disabled>Reset Study</button>
+            </div>
+
+            <!-- Session Stats Counters -->
+            <div class="session-stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Elapsed Time</span>
+                    <span class="stat-value" id="timer-display">00:00.0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">User Misclicks</span>
+                    <span class="stat-value text-danger" id="misclick-display">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Task Progress</span>
+                    <span class="stat-value text-success" id="progress-display">0/4</span>
+                </div>
+            </div>
+
+            <!-- Active Task Instruction -->
+            <div class="active-task-container">
+                <h3>Active Instruction</h3>
+                <div class="task-card-active" id="active-task-card">
+                    <p class="task-placeholder-text">Session not started. Click "Start Testing Session" to initialize participant task checklist.</p>
+                </div>
+            </div>
+
+            <!-- Task Checklist -->
+            <div class="task-checklist-container">
+                <h3>Participant Task Checklist</h3>
+                <ul class="task-checklist">
+                    <li class="checklist-item" id="task-item-1">
+                        <span class="checkbox-circle"></span>
+                        <div class="task-info">
+                            <span class="task-title">Task 1: Slide through onboarding and click "Get Started".</span>
+                        </div>
+                    </li>
+                    <li class="checklist-item" id="task-item-2">
+                        <span class="checkbox-circle"></span>
+                        <div class="task-info">
+                            <span class="task-title">Task 2: Enter password and login to dashboard.</span>
+                        </div>
+                    </li>
+                    <li class="checklist-item" id="task-item-3">
+                        <span class="checkbox-circle"></span>
+                        <div class="task-info">
+                            <span class="task-title">Task 3: Search markets and open Apple (AAPL) stock page.</span>
+                        </div>
+                    </li>
+                    <li class="checklist-item" id="task-item-4">
+                        <span class="checkbox-circle"></span>
+                        <div class="task-info">
+                            <span class="task-title">Task 4: Execute a buy transaction for $100.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- CENTER COLUMN: HARDWARE DEVICE SIMULATOR -->
+        <section class="workspace-simulator">
+            <!-- Flow inspector options -->
+            <div class="simulator-inspector-top">
+                <label class="toggle-control-mini">
+                    <input type="checkbox" id="toggle-hotspots" onchange="toggleHotspots(this.checked)">
+                    <span class="toggle-track-mini"><span class="toggle-thumb-mini"></span></span>
+                    <span class="toggle-label-mini">Show Interactive Hotspots</span>
+                </label>
+                <div class="flow-speed-selector">
+                    <label for="speed-select">Speed:</label>
+                    <select id="speed-select" class="dropdown-mini" onchange="updateTransitionSpeed(this.value)">
+                        <option value="normal">0.4s (Standard)</option>
+                        <option value="fast">0.2s (Fast)</option>
+                        <option value="slow">0.8s (Slow Motion)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Simulated iPhone 15 frame -->
+            <div class="iphone-frame" id="simulated-device">
+                <div class="iphone-notch">
+                    <div class="dynamic-island"></div>
+                </div>
+                <div class="iphone-screen-viewport" id="viewport-container" onclick="recordViewportClick(event)">
+                    
+                    <!-- 1. SPLASH SCREEN -->
+                    <div class="prototype-screen active-screen" id="screen-splash">
+                        <div class="splash-logo">
+                            <div class="logo-circle">
+                                <svg viewBox="0 0 24 24" width="48" height="48" stroke="#FFF" stroke-width="2" fill="none">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                    <polyline points="2 17 12 22 22 17"></polyline>
+                                    <polyline points="2 12 12 17 22 12"></polyline>
+                                </svg>
+                            </div>
+                            <h2>ZENITH</h2>
+                            <p>Wealth Management</p>
+                        </div>
+                        <div class="splash-loading-track">
+                            <div class="splash-loading-bar"></div>
+                        </div>
+                    </div>
+
+                    <!-- 2. ONBOARDING SCREEN -->
+                    <div class="prototype-screen" id="screen-onboarding">
+                        <div class="onboarding-image">
+                            <svg viewBox="0 0 100 100" width="160" height="160">
+                                <circle cx="50" cy="50" r="40" fill="rgba(99, 102, 241, 0.1)"></circle>
+                                <path d="M30 70 L50 35 L70 70 Z" fill="rgba(99, 102, 241, 0.6)" stroke="#6366F1" stroke-width="2"></path>
+                                <circle cx="50" cy="35" r="5" fill="#10B981"></circle>
+                                <line x1="20" y1="70" x2="80" y2="70" stroke="rgba(255,255,255,0.2)" stroke-width="2"></line>
+                            </svg>
+                        </div>
+                        <div class="onboarding-carousel-content">
+                            <h3 id="onboarding-title">Maximize Your Returns</h3>
+                            <p id="onboarding-body">Zenith Wealth utilizes machine intelligence to reallocate your portfolio dynamically for optimal growth.</p>
+                        </div>
+                        <div class="onboarding-footer">
+                            <div class="carousel-dots">
+                                <span class="dot active" onclick="setOnboardingSlide(0)"></span>
+                                <span class="dot" onclick="setOnboardingSlide(1)"></span>
+                                <span class="dot" onclick="setOnboardingSlide(2)"></span>
+                            </div>
+                            <button class="app-btn-primary hotspot-target" id="hotspot-onboarding-next" data-flow-step="onboarding-next" onclick="advanceOnboarding()">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- 3. LOGIN SCREEN -->
+                    <div class="prototype-screen" id="screen-login">
+                        <div class="login-header">
+                            <div class="app-mini-logo">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="#6366F1" stroke-width="2.5" fill="none">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                </svg>
+                                <span>ZENITH</span>
+                            </div>
+                            <h2>Welcome back</h2>
+                            <p>Enter your account credentials to access details</p>
+                        </div>
+                        <form class="login-form" onsubmit="handleLoginSubmit(event)">
+                            <div class="app-input-group">
+                                <label>Account Identifier</label>
+                                <input type="text" class="app-input" value="J.Sterling@portfolio.com" readonly>
+                            </div>
+                            <div class="app-input-group">
+                                <label>Account Security Code</label>
+                                <div class="input-password-wrapper">
+                                    <input type="password" id="login-pwd" class="app-input" placeholder="Type password here...">
+                                </div>
+                            </div>
+                            <button type="submit" class="app-btn-primary hotspot-target" id="hotspot-login-btn" data-flow-step="login">Login Securely</button>
+                        </form>
+                    </div>
+
+                    <!-- 4. DASHBOARD SCREEN -->
+                    <div class="prototype-screen" id="screen-dashboard">
+                        <div class="app-db-header">
+                            <div class="db-user-section">
+                                <div class="mini-avatar">JS</div>
+                                <div>
+                                    <h4>Jonathan S.</h4>
+                                    <span class="sub-label">Total Cash: $399,190</span>
+                                </div>
+                            </div>
+                            <div class="db-notification-trigger">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                            </div>
+                        </div>
+
+                        <!-- Balances Card -->
+                        <div class="balance-card-mini">
+                            <span class="card-label">TOTAL ASSETS VALUE</span>
+                            <h2>$1,248,390.45</h2>
+                            <div class="card-mini-trend">
+                                <span class="trend-indicator-pos">+14.2% ($154k) this month</span>
+                            </div>
+                        </div>
+
+                        <!-- Asset Watchlist Category -->
+                        <div class="watchlist-section">
+                            <div class="section-hdr">
+                                <h3>Watchlist Metrics</h3>
+                                <span class="view-all" id="hotspot-tab-markets" data-flow-step="nav-markets" onclick="navigateToDashboardSubTab('markets')">See Markets</span>
+                            </div>
+                            <div class="watchlist-items">
+                                <div class="watchlist-item hotspot-target" id="hotspot-stock-aapl" data-flow-step="stock-detail" onclick="openStockDetail('AAPL')">
+                                    <div class="item-icon-lbl">AAPL</div>
+                                    <div class="item-name-meta">
+                                        <span class="stock-ticker-name">Apple Inc.</span>
+                                        <span class="stock-sub">Technology Sector</span>
+                                    </div>
+                                    <div class="item-pricing">
+                                        <span class="price-val">$189.43</span>
+                                        <span class="price-trend-pos">+1.45%</span>
+                                    </div>
+                                </div>
+                                <div class="watchlist-item" onclick="openStockDetail('TSLA')">
+                                    <div class="item-icon-lbl bg-tsla">TSLA</div>
+                                    <div class="item-name-meta">
+                                        <span class="stock-ticker-name">Tesla Inc.</span>
+                                        <span class="stock-sub">Automotive Sector</span>
+                                    </div>
+                                    <div class="item-pricing">
+                                        <span class="price-val">$177.20</span>
+                                        <span class="price-trend-neg">-3.12%</span>
+                                    </div>
+                                </div>
+                                <div class="watchlist-item" onclick="openStockDetail('NVDA')">
+                                    <div class="item-icon-lbl bg-nvda">NVDA</div>
+                                    <div class="item-name-meta">
+                                        <span class="stock-ticker-name">NVIDIA Corp.</span>
+                                        <span class="stock-sub">Semiconductor Sector</span>
+                                    </div>
+                                    <div class="item-pricing">
+                                        <span class="price-val">$924.50</span>
+                                        <span class="price-trend-pos">+6.80%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Bottom Nav -->
+                        <div class="app-bottom-nav">
+                            <button class="nav-item active" onclick="navigateToDashboardSubTab('home')">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                                <span>Home</span>
+                            </button>
+                            <button class="nav-item hotspot-target" id="hotspot-nav-markets-tab" data-flow-step="nav-markets" onclick="navigateToDashboardSubTab('markets')">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                                <span>Markets</span>
+                            </button>
+                            <button class="nav-item" onclick="navigateToDashboardSubTab('analytics')">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                                <span>Assets</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 5. STOCK DETAILS SCREEN (AAPL) -->
+                    <div class="prototype-screen" id="screen-stock-details">
+                        <div class="stock-detail-hdr">
+                            <button class="back-arrow-btn" onclick="goBackToDashboard()">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            </button>
+                            <span class="title-ticker" id="detail-stock-title">AAPL / Apple Inc.</span>
+                            <div class="detail-actions"></div>
+                        </div>
+
+                        <div class="detail-pricing-panel">
+                            <div class="current-price-row">
+                                <span class="current-price" id="detail-stock-price">$189.43</span>
+                                <span class="price-badge-pos" id="detail-stock-trend">+1.45% today</span>
+                            </div>
+                            <span class="price-sub">Market Open &bull; Delayed 15m</span>
+                        </div>
+
+                        <!-- Mini SVG chart -->
+                        <div class="stock-detail-chart">
+                            <svg viewBox="0 0 300 120" width="100%" height="100%">
+                                <defs>
+                                    <linearGradient id="chart-glow-grad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="rgba(99, 102, 241, 0.35)"></stop>
+                                        <stop offset="100%" stop-color="rgba(99, 102, 241, 0)"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M 0,110 Q 50,90 100,80 T 200,60 T 300,30 L 300,120 L 0,120 Z" fill="url(#chart-glow-grad)"></path>
+                                <path d="M 0,110 Q 50,90 100,80 T 200,60 T 300,30" fill="none" stroke="#6366F1" stroke-width="3" stroke-linecap="round"></path>
+                                <circle cx="300" cy="30" r="4" fill="#6366F1"></circle>
+                            </svg>
+                        </div>
+
+                        <div class="stock-detail-statistics">
+                            <div class="stat-row-item">
+                                <span class="lbl-lbl">Daily Range</span>
+                                <span class="val-val">$187.60 - $190.20</span>
+                            </div>
+                            <div class="stat-row-item">
+                                <span class="lbl-lbl">Market Capitalization</span>
+                                <span class="val-val">2.95 Trillion</span>
+                            </div>
+                            <div class="stat-row-item">
+                                <span class="lbl-lbl">P/E Ratio (LTM)</span>
+                                <span class="val-val">28.45</span>
+                            </div>
+                        </div>
+
+                        <div class="stock-details-footer">
+                            <!-- Buy hotspots trigger -->
+                            <button class="app-btn-primary hotspot-target" id="hotspot-stock-buy-trigger" data-flow-step="buy-amount" onclick="openOrderModal()">Buy Apple Shares</button>
+                        </div>
+                    </div>
+
+                    <!-- 6. BUY FORM SCREEN (Hotspots Target) -->
+                    <div class="prototype-screen" id="screen-buy-form">
+                        <div class="stock-detail-hdr">
+                            <button class="back-arrow-btn" onclick="goBackToStockDetails()">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            </button>
+                            <span class="title-ticker">Execute Buy Order</span>
+                        </div>
+
+                        <div class="buy-form-body">
+                            <div class="asset-display-summary">
+                                <span class="asset-sub">Purchasing Asset</span>
+                                <span class="asset-name">Apple Inc (AAPL)</span>
+                            </div>
+
+                            <div class="buy-input-group">
+                                <label>Enter Transaction Amount</label>
+                                <div class="buy-input-wrapper">
+                                    <span class="currency-symbol">$</span>
+                                    <input type="number" class="app-input-buy" id="buy-amount-input" value="100" min="1" max="10000">
+                                </div>
+                                <span class="input-limit-helper">Available Cash: $399,190</span>
+                            </div>
+
+                            <div class="disclaimer-note">
+                                <p><strong>Disclaimer:</strong> Clicking "Execute Buy Order" executes a market order transaction instantly. Standard clearing rules apply.</p>
+                            </div>
+                        </div>
+
+                        <div class="buy-form-footer">
+                            <button class="app-btn-primary hotspot-target" id="hotspot-confirm-order-btn" data-flow-step="order-success" onclick="executeBuyOrder()">Execute Buy Order</button>
+                        </div>
+                    </div>
+
+                    <!-- 7. SUCCESS SCREEN -->
+                    <div class="prototype-screen" id="screen-success">
+                        <div class="success-screen-body">
+                            <div class="success-circle-icon">
+                                <svg viewBox="0 0 24 24" width="40" height="40" stroke="#10B981" stroke-width="2.5" fill="none">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <h2>Order Executed</h2>
+                            <p>You have successfully purchased shares. Details below:</p>
+
+                            <div class="receipt-card">
+                                <div class="receipt-row">
+                                    <span class="receipt-lbl">Asset Code:</span>
+                                    <span class="receipt-val">AAPL (Apple Inc.)</span>
+                                </div>
+                                <div class="receipt-row">
+                                    <span class="receipt-lbl">Order Total:</span>
+                                    <span class="receipt-val" id="receipt-total-amt">$100.00 USD</span>
+                                </div>
+                                <div class="receipt-row">
+                                    <span class="receipt-lbl">Execution Status:</span>
+                                    <span class="receipt-val text-success">SETTLED</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="success-screen-footer">
+                            <button class="app-btn-primary hotspot-target" id="hotspot-success-done-btn" data-flow-step="complete" onclick="finalizeStudyFlow()">Return to Dashboard</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="iphone-home-indicator"></div>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: FEEDBACK & STUDY LOGS -->
+        <section class="workspace-panel feedback-panel">
+            <div class="panel-header">
+                <h2>Real-Time Study Logger</h2>
+                <p>Captures click paths, navigation triggers, and session activity logs to analyze where the participant succeeds or struggles.</p>
+            </div>
+
+            <!-- Real-time activity log box -->
+            <div class="session-logger-box">
+                <div class="logger-hdr">
+                    <span>Live Event Log</span>
+                    <button class="clear-log-btn" onclick="clearEventLogs()">Clear</button>
+                </div>
+                <div class="logger-content" id="event-logs-list">
+                    <p class="log-placeholder">Log is empty. Start a session and click elements inside the device to capture metrics.</p>
+                </div>
+            </div>
+
+            <!-- Past Study Records -->
+            <div class="past-studies-section">
+                <h3>Usability Study Records</h3>
+                <div class="past-studies-list" id="participant-history-list">
+                    <!-- Default mock participant records -->
+                    <div class="participant-row">
+                        <div class="part-avatar">#1</div>
+                        <div class="part-info">
+                            <span class="part-name">Participant A (Sarah Jenkins)</span>
+                            <span class="part-meta">TTC: 42.4s &bull; Misclicks: 3</span>
+                        </div>
+                        <span class="badge-success">Pass</span>
+                    </div>
+                    <div class="participant-row">
+                        <div class="part-avatar">#2</div>
+                        <div class="part-info">
+                            <span class="part-name">Participant B (Robert Chen)</span>
+                            <span class="part-meta">TTC: 31.8s &bull; Misclicks: 0</span>
+                        </div>
+                        <span class="badge-success">Pass</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes & Feedback Capture Form -->
+            <div class="notes-capture-section">
+                <h3>Add Coordinator Notes</h3>
+                <form class="notes-form" onsubmit="saveCoordinatorNotes(event)">
+                    <div class="form-group-mini">
+                        <textarea id="coordinator-notes-input" placeholder="Type observations here... (e.g. 'Participant was confused by the market tab click trigger')" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="action-btn-secondary" id="notes-submit-btn">Save Observation Note</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- App Footer -->
+    <footer class="studio-footer">
+        <div class="footer-container">
+            <p>&copy; 2026 Zenith Design Studio. Built for educational interactive prototyping. All rights reserved.</p>
+            <p class="footer-links">
+                <a href="#" onclick="toggleStudySession()">Reset Sim</a> &bull;
+                <a href="https://figma.com" target="_blank">Figma Integration</a> &bull;
+                <a href="https://invisionapp.com" target="_blank">InVision Link</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

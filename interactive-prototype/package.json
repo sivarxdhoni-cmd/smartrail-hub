@@ -1,0 +1,23 @@
+{
+  "name": "interactive-prototype",
+  "version": "1.0.0",
+  "description": "Zenith Mobile Interactive Prototyping Studio and Usability Study Console",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite --port 3001",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "prototyping",
+    "usability-testing",
+    "hotspots",
+    "device-simulator",
+    "ux"
+  ],
+  "author": "Zenith Design Lab",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
+}
