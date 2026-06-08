@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith Usability Testing Hub & SUS Analyzer</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-primary">Zenith</span>
+                    <span class="logo-secondary">Usability Hub</span>
+                </div>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" id="tab-dashboard" onclick="switchTab('dashboard')">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="tab-icon"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    Metrics Dashboard
+                </button>
+                <button class="nav-tab" id="tab-sus" onclick="switchTab('sus')">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="tab-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    SUS Score Simulator
+                </button>
+                <button class="nav-tab" id="tab-plan" onclick="switchTab('plan')">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="tab-icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    Research Brief
+                </button>
+            </nav>
+            <div class="header-actions">
+                <span class="status-badge">Analytics Sync Active</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- TAB 1: METRICS & STUDY DASHBOARD -->
+        <section id="content-dashboard" class="tab-content active-content">
+            <div class="dashboard-container">
+                <!-- Overview Stats Row -->
+                <div class="stats-summary-row">
+                    <div class="metric-card">
+                        <span class="card-lbl">Total Study Subjects</span>
+                        <div class="card-val">8 Participants</div>
+                        <span class="card-meta">In-person & remote splits</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="card-lbl">Task Completion Rate</span>
+                        <div class="card-val text-success">93.8%</div>
+                        <span class="card-meta">Target benchmark: >85%</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="card-lbl">Mean Time-To-Complete</span>
+                        <div class="card-val">36.4 Seconds</div>
+                        <span class="card-meta">Best participant: 28.2s</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="card-lbl">Average SUS Rating</span>
+                        <div class="card-val text-primary">84.2 / 100</div>
+                        <span class="card-meta">Grade A (Excellent usability)</span>
+                    </div>
+                </div>
+
+                <!-- Custom Visual Charts -->
+                <div class="charts-grid">
+                    <!-- Chart 1: Time-To-Complete per Task -->
+                    <div class="chart-panel">
+                        <h3>Average Completion Time per Scenario</h3>
+                        <div class="svg-chart-container">
+                            <svg viewBox="0 0 500 220" width="100%" height="100%">
+                                <!-- Y Axis Guides -->
+                                <line x1="100" y1="30" x2="480" y2="30" stroke="rgba(255,255,255,0.05)"></line>
+                                <line x1="100" y1="75" x2="480" y2="75" stroke="rgba(255,255,255,0.05)"></line>
+                                <line x1="100" y1="120" x2="480" y2="120" stroke="rgba(255,255,255,0.05)"></line>
+                                <line x1="100" y1="165" x2="480" y2="165" stroke="rgba(255,255,255,0.05)"></line>
+
+                                <!-- Y Axis Labels -->
+                                <text x="90" y="34" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">Task 1: Onboard</text>
+                                <text x="90" y="79" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">Task 2: Login</text>
+                                <text x="90" y="124" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">Task 3: Search</text>
+                                <text x="90" y="169" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">Task 4: Settle</text>
+
+                                <!-- Horizontal Bars -->
+                                <!-- Task 1: 8.4s (Bar length: 180px) -->
+                                <rect x="100" y="22" width="180" height="20" rx="4" fill="#6366F1" class="chart-bar"></rect>
+                                <text x="290" y="36" fill="#FFF" font-size="11" font-weight="600">8.4s</text>
+
+                                <!-- Task 2: 12.1s (Bar length: 260px) -->
+                                <rect x="100" y="67" width="260" height="20" rx="4" fill="#8B5CF6" class="chart-bar"></rect>
+                                <text x="370" y="81" fill="#FFF" font-size="11" font-weight="600">12.1s</text>
+
+                                <!-- Task 3: 5.8s (Bar length: 130px) -->
+                                <rect x="100" y="112" width="130" height="20" rx="4" fill="#10B981" class="chart-bar"></rect>
+                                <text x="240" y="126" fill="#FFF" font-size="11" font-weight="600">5.8s</text>
+
+                                <!-- Task 4: 10.2s (Bar length: 220px) -->
+                                <rect x="100" y="157" width="220" height="20" rx="4" fill="#F59E0B" class="chart-bar"></rect>
+                                <text x="330" y="171" fill="#FFF" font-size="11" font-weight="600">10.2s</text>
+
+                                <!-- X Axis line -->
+                                <line x1="100" y1="190" x2="480" y2="190" stroke="rgba(255,255,255,0.2)"></line>
+                                <text x="100" y="208" fill="rgba(255,255,255,0.4)" font-size="9" text-anchor="middle">0s</text>
+                                <text x="290" y="208" fill="rgba(255,255,255,0.4)" font-size="9" text-anchor="middle">10s</text>
+                                <text x="480" y="208" fill="rgba(255,255,255,0.4)" font-size="9" text-anchor="middle">20s</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Chart 2: Completion Rates / Success Rings -->
+                    <div class="chart-panel">
+                        <h3>Friction & Error Rate by Screen Type</h3>
+                        <div class="svg-chart-container">
+                            <svg viewBox="0 0 500 220" width="100%" height="100%">
+                                <defs>
+                                    <linearGradient id="chart-area-grad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="rgba(239, 68, 68, 0.4)"></stop>
+                                        <stop offset="100%" stop-color="rgba(239, 68, 68, 0.0)"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Grid Lines -->
+                                <line x1="50" y1="20" x2="450" y2="20" stroke="rgba(255,255,255,0.03)"></line>
+                                <line x1="50" y1="70" x2="450" y2="70" stroke="rgba(255,255,255,0.03)"></line>
+                                <line x1="50" y1="120" x2="450" y2="120" stroke="rgba(255,255,255,0.03)"></line>
+                                <line x1="50" y1="170" x2="450" y2="170" stroke="rgba(255,255,255,0.03)"></line>
+
+                                <!-- Y Axis Labels -->
+                                <text x="40" y="24" fill="rgba(255,255,255,0.3)" font-size="9" text-anchor="end">4.0</text>
+                                <text x="40" y="74" fill="rgba(255,255,255,0.3)" font-size="9" text-anchor="end">2.0</text>
+                                <text x="40" y="124" fill="rgba(255,255,255,0.3)" font-size="9" text-anchor="end">1.0</text>
+                                <text x="40" y="174" fill="rgba(255,255,255,0.3)" font-size="9" text-anchor="end">0.0</text>
+
+                                <!-- Area filled under line -->
+                                <path d="M 60,170 Q 150,145 240,70 T 330,120 T 420,150 L 420,170 Z" fill="url(#chart-area-grad)"></path>
+
+                                <!-- Line Chart path (Error trends: Onboarding: 0.5, Login: 2.2, Stock Detail: 1.1, Confirm order: 0.7) -->
+                                <path d="M 60,170 Q 150,145 240,70 T 330,120 T 420,150" fill="none" stroke="#EF4444" stroke-width="3" stroke-linecap="round"></path>
+                                
+                                <circle cx="240" cy="70" r="4" fill="#EF4444"></circle>
+                                <text x="240" y="55" fill="#EF4444" font-size="10" font-weight="bold" text-anchor="middle">Peak Login Friction</text>
+
+                                <!-- X Axis Labels -->
+                                <text x="60" y="195" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle">Splash</text>
+                                <text x="150" y="195" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle">Onboard</text>
+                                <text x="240" y="195" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle">Login Securely</text>
+                                <text x="330" y="195" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle">Markets List</text>
+                                <text x="420" y="195" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="middle">Order Checkout</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Participant Sessions table -->
+                <div class="sessions-registry-panel">
+                    <div class="panel-header">
+                        <h3>Testing Registry & Session Log Logs</h3>
+                        <div class="search-box">
+                            <input type="text" placeholder="Filter remarks..." onkeyup="filterRemarks(this.value)">
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="registry-table" id="registry-table-body">
+                            <thead>
+                                <tr>
+                                    <th>Participant</th>
+                                    <th>Method</th>
+                                    <th>Task Completion</th>
+                                    <th>TTC (Avg)</th>
+                                    <th>Errors / Misclicks</th>
+                                    <th>Critical Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Sarah Jenkins</td>
+                                    <td><span class="badge-type">In-Person</span></td>
+                                    <td><span class="badge-success-tag">4/4 Complete</span></td>
+                                    <td>42.4 seconds</td>
+                                    <td class="text-danger font-bold">3 errors</td>
+                                    <td class="remark-text">Struggled to toggle password field state, complained of input contrast.</td>
+                                </tr>
+                                <tr>
+                                    <td>Robert Chen</td>
+                                    <td><span class="badge-type">Remote</span></td>
+                                    <td><span class="badge-success-tag">4/4 Complete</span></td>
+                                    <td>31.8 seconds</td>
+                                    <td class="text-success">0 errors</td>
+                                    <td class="remark-text">Completed quickly. Found interactive hotspots useful.</td>
+                                </tr>
+                                <tr>
+                                    <td>Maria Rodriguez</td>
+                                    <td><span class="badge-type">In-Person</span></td>
+                                    <td><span class="badge-success-tag">4/4 Complete</span></td>
+                                    <td>38.2 seconds</td>
+                                    <td class="text-danger">1 error</td>
+                                    <td class="remark-text">Double-clicked 'Next' on onboarding, skipping slides by mistake.</td>
+                                </tr>
+                                <tr>
+                                    <td>Marcus Vance</td>
+                                    <td><span class="badge-type">Remote</span></td>
+                                    <td><span class="badge-danger-tag">3/4 Abandoned</span></td>
+                                    <td>--</td>
+                                    <td class="text-danger font-bold">7 errors</td>
+                                    <td class="remark-text">Failed to locate AAPL stock list since it was tucked below fold.</td>
+                                </tr>
+                                <tr>
+                                    <td>Helena Vestergaard</td>
+                                    <td><span class="badge-type">In-Person</span></td>
+                                    <td><span class="badge-success-tag">4/4 Complete</span></td>
+                                    <td>29.5 seconds</td>
+                                    <td class="text-success">0 errors</td>
+                                    <td class="remark-text">Extremely fast navigation. Positive feedback on purchase settlement layout.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Design Recommendations Report panel -->
+                <div class="findings-report-panel">
+                    <h3>UX Action Plan & Iterative Recommendations</h3>
+                    <div class="findings-grid">
+                        <div class="finding-card border-high">
+                            <span class="severity-badge sev-high">High Severity</span>
+                            <h4>Stock Watchlist Navigation Fold</h4>
+                            <p class="finding-desc">Participants took over 14s to discover Apple stock because watchlist elements sat below the primary screen viewport fold, violating Heuristic 7 (Efficiency of Use).</p>
+                            <div class="design-fix">
+                                <strong>Proposed Re-design Fix:</strong> Integrate a global search icon directly in the main header of the dashboard, allowing users to type equity searches directly without vertical page scrolls.
+                            </div>
+                        </div>
+
+                        <div class="finding-card border-medium">
+                            <span class="severity-badge sev-med">Medium Severity</span>
+                            <h4>Onboarding Double-Tap Slide Jumps</h4>
+                            <p class="finding-desc">Users frequently double-clicked 'Next' on slides due to feedback delays, causing them to jump straight to authentication and skip tutorials (Heuristic 1: Status Visibility).</p>
+                            <div class="design-fix">
+                                <strong>Proposed Re-design Fix:</strong> Introduce a brief transition timeout (300ms) that disables next-navigation clicks during card slide animations, preventing duplicate commands.
+                            </div>
+                        </div>
+
+                        <div class="finding-card border-low">
+                            <span class="severity-badge sev-low">Low Severity</span>
+                            <h4>Onboarding Indicator Dots Dot Targeting</h4>
+                            <p class="finding-desc">Some users tried to tap the small indicator slider dots to jump slides directly, but targets were not wired with click handlers (Heuristic 7: Flexibility).</p>
+                            <div class="design-fix">
+                                <strong>Proposed Re-design Fix:</strong> Wire click event listeners on dot coordinates, converting them to active navigational shortcuts that skip slides directly.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: SUS SCORE CALCULATOR -->
+        <section id="content-sus" class="tab-content">
+            <div class="sus-container">
+                <div class="sus-header-info">
+                    <h2>Interactive System Usability Scale (SUS) Calculator</h2>
+                    <p>Select responses for the 10 questionnaire prompts. The calculator computes the final SUS rating out of 100 dynamically, applying the standard SUS scale multiplier.</p>
+                </div>
+
+                <div class="sus-workspace-layout">
+                    <!-- Questions List (Odd: positive, Even: negative) -->
+                    <form class="sus-questions-form" id="sus-survey-form">
+                        <!-- Q1 -->
+                        <div class="sus-q-row">
+                            <div class="q-num">1</div>
+                            <div class="q-details">
+                                <p class="q-prompt">I think that I would like to use this system frequently.</p>
+                                <div class="rating-scale">
+                                    <span>Strongly Disagree</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="sus-q1" value="1">1</label>
+                                        <label><input type="radio" name="sus-q1" value="2">2</label>
+                                        <label><input type="radio" name="sus-q1" value="3">3</label>
+                                        <label><input type="radio" name="sus-q1" value="4" checked>4</label>
+                                        <label><input type="radio" name="sus-q1" value="5">5</label>
+                                    </div>
+                                    <span>Strongly Agree</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="sus-q-row">
+                            <div class="q-num">2</div>
+                            <div class="q-details">
+                                <p class="q-prompt">I found the system unnecessarily complex.</p>
+                                <div class="rating-scale">
+                                    <span>Strongly Disagree</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="sus-q2" value="1" checked>1</label>
+                                        <label><input type="radio" name="sus-q2" value="2">2</label>
+                                        <label><input type="radio" name="sus-q2" value="3">3</label>
+                                        <label><input type="radio" name="sus-q2" value="4">4</label>
+                                        <label><input type="radio" name="sus-q2" value="5">5</label>
+                                    </div>
+                                    <span>Strongly Agree</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="sus-q-row">
+                            <div class="q-num">3</div>
+                            <div class="q-details">
+                                <p class="q-prompt">I thought the system was easy to use.</p>
+                                <div class="rating-scale">
+                                    <span>Strongly Disagree</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="sus-q3" value="1">1</label>
+                                        <label><input type="radio" name="sus-q3" value="2">2</label>
+                                        <label><input type="radio" name="sus-q3" value="3">3</label>
+                                        <label><input type="radio" name="sus-q3" value="4" checked>4</label>
+                                        <label><input type="radio" name="sus-q3" value="5">5</label>
+                                    </div>
+                                    <span>Strongly Agree</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="sus-q-row">
+                            <div class="q-num">4</div>
+                            <div class="q-details">
+                                <p class="q-prompt">I think that I would need the support of a technical person to be able to use this system.</p>
+                                <div class="rating-scale">
+                                    <span>Strongly Disagree</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="sus-q4" value="1" checked>1</label>
+                                        <label><input type="radio" name="sus-q4" value="2">2</label>
+                                        <label><input type="radio" name="sus-q4" value="3">3</label>
+                                        <label><input type="radio" name="sus-q4" value="4">4</label>
+                                        <label><input type="radio" name="sus-q4" value="5">5</label>
+                                    </div>
+                                    <span>Strongly Agree</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q5 -->
+                        <div class="sus-q-row">
+                            <div class="q-num">5</div>
+                            <div class="q-details">
+                                <p class="q-prompt">I found the various functions in this system were well integrated.</p>
+                                <div class="rating-scale">
+                                    <span>Strongly Disagree</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="sus-q5" value="1">1</label>
+                                        <label><input type="radio" name="sus-q5" value="2">2</label>
+                                        <label><input type="radio" name="sus-q5" value="3">3</label>
+                                        <label><input type="radio" name="sus-q5" value="4" checked>4</label>
+                                        <label><input type="radio" name="sus-q5" value="5">5</label>
+                                    </div>
+                                    <span>Strongly Agree</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q6 -->
+                        <div class="sus-q-row">
+                            <div class="q-num">6</div>
+                            <div class="q-details">
+                                <p class="q-prompt">I thought there was too much inconsistency in this system.</p>
+                                <div class="rating-scale">
+                                    <span>Strongly Disagree</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="sus-q6" value="1" checked>1</label>
+                                        <label><input type="radio" name="sus-q6" value="2">2</label>
+                                        <label><input type="radio" name="sus-q6" value="3">3</label>
+                                        <label><input type="radio" name="sus-q6" value="4">4</label>
+                                        <label><input type="radio" name="sus-q6" value="5">5</label>
+                                    </div>
+                                    <span>Strongly Agree</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q7 -->
+                        <div class="sus-q-row">
+                            <div class="q-num">7</div>
+                            <div class="q-details">
+                                <p class="q-prompt">I would imagine that most people would learn to use this system very quickly.</p>
+                                <div class="rating-scale">
+                                    <span>Strongly Disagree</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="sus-q7" value="1">1</label>
+                                        <label><input type="radio" name="sus-q7" value="2">2</label>
+                                        <label><input type="radio" name="sus-q7" value="3">3</label>
+                                        <label><input type="radio" name="sus-q7" value="4">4</label>
+                                        <label><input type="radio" name="sus-q7" value="5" checked>5</label>
+                                    </div>
+                                    <span>Strongly Agree</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q8 -->
+                        <div class="sus-q-row">
+                            <div class="q-num">8</div>
+                            <div class="q-details">
+                                <p class="q-prompt">I found the system very cumbersome to use.</p>
+                                <div class="rating-scale">
+                                    <span>Strongly Disagree</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="sus-q8" value="1" checked>1</label>
+                                        <label><input type="radio" name="sus-q8" value="2">2</label>
+                                        <label><input type="radio" name="sus-q8" value="3">3</label>
+                                        <label><input type="radio" name="sus-q8" value="4">4</label>
+                                        <label><input type="radio" name="sus-q8" value="5">5</label>
+                                    </div>
+                                    <span>Strongly Agree</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q9 -->
+                        <div class="sus-q-row">
+                            <div class="q-num">9</div>
+                            <div class="q-details">
+                                <p class="q-prompt">I felt very confident using the system.</p>
+                                <div class="rating-scale">
+                                    <span>Strongly Disagree</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="sus-q9" value="1">1</label>
+                                        <label><input type="radio" name="sus-q9" value="2">2</label>
+                                        <label><input type="radio" name="sus-q9" value="3">3</label>
+                                        <label><input type="radio" name="sus-q9" value="4" checked>4</label>
+                                        <label><input type="radio" name="sus-q9" value="5">5</label>
+                                    </div>
+                                    <span>Strongly Agree</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q10 -->
+                        <div class="sus-q-row">
+                            <div class="q-num">10</div>
+                            <div class="q-details">
+                                <p class="q-prompt">I needed to learn a lot of things before I could get going with this system.</p>
+                                <div class="rating-scale">
+                                    <span>Strongly Disagree</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="sus-q10" value="1" checked>1</label>
+                                        <label><input type="radio" name="sus-q10" value="2">2</label>
+                                        <label><input type="radio" name="sus-q10" value="3">3</label>
+                                        <label><input type="radio" name="sus-q10" value="4">4</label>
+                                        <label><input type="radio" name="sus-q10" value="5">5</label>
+                                    </div>
+                                    <span>Strongly Agree</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Score Panel Outputs -->
+                    <div class="sus-score-panel">
+                        <div class="panel-header">
+                            <h3>Computed SUS Summary</h3>
+                        </div>
+
+                        <div class="score-gauge-wrapper">
+                            <div class="score-circle-outer">
+                                <div class="score-value-text" id="sus-score-number">92.5</div>
+                                <span class="score-caption">Computed Score</span>
+                            </div>
+                        </div>
+
+                        <div class="rating-descriptions">
+                            <div class="rating-item-card">
+                                <span class="desc-lbl">Adjective Descriptor</span>
+                                <div class="desc-val text-success" id="sus-adjective-text">Excellent</div>
+                            </div>
+                            <div class="rating-item-card">
+                                <span class="desc-lbl">Usability Grade</span>
+                                <div class="desc-val text-primary" id="sus-grade-text">Grade A</div>
+                            </div>
+                        </div>
+
+                        <div class="sus-formula-card">
+                            <h4>The Scoring Algorithm</h4>
+                            <p>For odd questions, subtract 1 from the raw response (0-4 scope). For even questions, subtract the response value from 5 (0-4 scope). Sum these values and multiply the result by 2.5 to scale the final output to 100.</p>
+                            <div class="formula-math">
+                                <code>Score = [ Sum(Qi_odd - 1) + Sum(5 - Qi_even) ] &times; 2.5</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: TEST PLAN BRIEF -->
+        <section id="content-plan" class="tab-content">
+            <div class="plan-container">
+                <div class="section-title-wrapper">
+                    <h2>Usability Research Test Plan</h2>
+                    <p class="subtitle">Official testing parameters, objectives, scripts, and criteria used to run participant sessions for the Zenith App.</p>
+                </div>
+
+                <div class="plan-sections-grid">
+                    <div class="plan-card">
+                        <h3>1. Executive Objectives</h3>
+                        <ul>
+                            <li><strong>Evaluate Learnability</strong>: Measure time spent decoding dashboard columns and navigating stock watchlists.</li>
+                            <li><strong>Identify Navigation Friction</strong>: Count errors when clicking navigation items and searching stock details.</li>
+                            <li><strong>Benchmark Transactions</strong>: Track order checkout completion rates and input error rates.</li>
+                            <li><strong>Quantify Usability</strong>: Gather standardized SUS survey metrics to measure overall user satisfaction.</li>
+                        </ul>
+                    </div>
+
+                    <div class="plan-card">
+                        <h3>2. Participant Profile Recruitment</h3>
+                        <p>We recruited 8 participants based on the following criteria:</p>
+                        <ul>
+                            <li>Ages 22-65, balanced gender splits.</li>
+                            <li>Experience ranges: 4 novice investors (never traded or used apps), 4 expert traders (use mobile investment brokerages daily).</li>
+                            <li>In-person sessions (5) conducted in our Zenith Design Lab; Remote sessions (3) observed via screen sharing.</li>
+                        </ul>
+                    </div>
+
+                    <div class="plan-card">
+                        <h3>3. Testing Scenario Scripts</h3>
+                        <div class="scenario-details">
+                            <div class="scenario-step">
+                                <h5>Scenario 1: System Boot & Carousel Onboard</h5>
+                                <p><strong>Script:</strong> "You are booting the Zenith Wealth application for the first time. Spend a moment reviewing onboarding tutorial cards, then advance to the authentication screen."</p>
+                            </div>
+                            <div class="scenario-step">
+                                <h5>Scenario 2: Secure Log In</h5>
+                                <p><strong>Script:</strong> "Log in securely to view your asset records. Enter any code inside the account security pin field, click submit, and confirm you see the dashboard."</p>
+                            </div>
+                            <div class="scenario-step">
+                                <h5>Scenario 3: Stock Asset Discovery</h5>
+                                <p><strong>Script:</strong> "You wish to purchase stock in Apple Inc. Navigate to the stock detail page for AAPL and confirm you can view price statistics and charts."</p>
+                            </div>
+                            <div class="scenario-step">
+                                <h5>Scenario 4: Order Settle & Settle</h5>
+                                <p><strong>Script:</strong> "Execute a purchase order for $100 of Apple Stock. Verify transaction summary prompts, finalize order checkout, and return safely to dashboard."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="plan-card">
+                        <h3>4. Key Usability Metrics Tracked</h3>
+                        <table class="plan-metrics-table">
+                            <thead>
+                                <tr>
+                                    <th>Metric Category</th>
+                                    <th>Definition</th>
+                                    <th>Target Criteria</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Completion Rate</strong></td>
+                                    <td>Percentage of subjects completing tasks successfully.</td>
+                                    <td>&gt; 85% success</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Time-to-Complete</strong></td>
+                                    <td>Total seconds from task start to completion.</td>
+                                    <td>&lt; 45s total flow</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Misclick Frequency</strong></td>
+                                    <td>Clicks made on non-navigational elements.</td>
+                                    <td>&lt; 2 errors per run</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>System Usability</strong></td>
+                                    <td>Score generated via the 10 questionnaire prompts.</td>
+                                    <td>&gt; 70 score (Grade C)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- App Footer -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <p>&copy; 2026 Zenith Design Lab. Built for educational usability testing reports. All rights reserved.</p>
+            <p class="footer-links">
+                <a href="#content-plan" onclick="switchTab('plan')">Research Plan</a> &bull;
+                <a href="#content-sus" onclick="switchTab('sus')">SUS Score Simulator</a> &bull;
+                <a href="#content-dashboard" onclick="switchTab('dashboard')">Metrics Dashboard</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- App JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>

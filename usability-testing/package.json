@@ -1,0 +1,22 @@
+{
+  "name": "usability-testing",
+  "version": "1.0.0",
+  "description": "Zenith Usability Testing Reports and Interactive SUS Questionnaire Simulator",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite --port 3002",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "usability-testing",
+    "sus-calculator",
+    "ux-research",
+    "metrics"
+  ],
+  "author": "Zenith Design Lab",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
+}
