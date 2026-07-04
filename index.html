@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartRail Hub – Intelligent Passenger Management & Revenue System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/smartrail-hub/assets/index-BL_DllEi.js"></script>
+  <link rel="stylesheet" crossorigin href="/smartrail-hub/assets/index-ntL25Ujp.css">
+</head>
+<body>
+
+    <!-- EVACUATION ALERTS SIREN BANNER -->
+    <div class="evacuation-siren-banner">
+        <span class="siren-icon-blink">🚨</span>
+        <span>EMERGENCY EVACUATION ACTIVE — ALL SMART GATES OPENED — PROCEED TO EXITS</span>
+        <button class="form-btn-primary" style="background:#fff; color:var(--danger); padding:0.25rem 0.75rem; font-size:0.8rem; border-radius:4px;" onclick="resetEmergencyEvacuation()">Reset Siren</button>
+    </div>
+
+    <!-- App Header & Role Switcher Navigation -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-block">
+                <div class="logo-symbol">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                        <line x1="15" y1="3" x2="15" y2="21"></line>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="3" y1="15" x2="21" y2="15"></line>
+                    </svg>
+                </div>
+                <div>
+                    <span class="logo-title">SmartRail <strong>Hub</strong></span>
+                    <span class="logo-sub">Indian Railways Station Console</span>
+                </div>
+            </div>
+
+            <!-- Navigation views -->
+            <div class="nav-selector">
+                <button class="nav-tab-btn active" onclick="switchAppView('view-admin', this)">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    Admin Console
+                </button>
+                <button class="nav-tab-btn" onclick="switchAppView('view-passenger', this)">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                    Passenger App
+                </button>
+                <button class="nav-tab-btn" onclick="switchAppView('view-gates', this)">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M12 2v9"></path><path d="M8 5h8"></path></svg>
+                    Smart Gates
+                </button>
+                <button class="nav-tab-btn" onclick="switchAppView('view-billboard', this)">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    Public Displays
+                </button>
+                <button class="nav-tab-btn" onclick="switchAppView('view-vending', this)">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="5" y1="8" x2="19" y2="8"></line><line x1="5" y1="15" x2="19" y2="15"></line></svg>
+                    Shopping Zone
+                </button>
+            </div>
+
+            <div class="header-meta">
+                <span class="system-clock" id="nav-clock">14:00</span>
+                <button class="emergency-evac-trigger" onclick="triggerEmergencyEvacuation()">
+                    🚨 TRIGGER EVACUATION
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Master Viewport -->
+    <main class="app-viewport">
+
+        <!-- ==========================================================================
+             VIEW 1: ADMIN CONTROL DASHBOARD
+             ========================================================================== -->
+        <div class="app-view-panel active" id="view-admin">
+            <div class="admin-grid">
+                
+                <!-- Main Analytics Section -->
+                <div class="admin-main-col">
+                    
+                    <!-- Stats widgets -->
+                    <div class="stats-strip">
+                        <div class="stat-widget">
+                            <div class="stat-icon text-info">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </div>
+                            <div class="stat-details">
+                                <h4>Passengers in Station</h4>
+                                <span class="stat-value" id="stat-passengers">--</span>
+                            </div>
+                        </div>
+                        <div class="stat-widget exec">
+                            <div class="stat-icon text-accent">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            </div>
+                            <div class="stat-details">
+                                <h4>Active Delays / Alerts</h4>
+                                <span class="stat-value" id="stat-alerts">--</span>
+                            </div>
+                        </div>
+                        <div class="stat-widget revenue">
+                            <div class="stat-icon text-success">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                            </div>
+                            <div class="stat-details">
+                                <h4>Total Station Revenue</h4>
+                                <span class="stat-value" id="rev-all-total">$0.00</span>
+                            </div>
+                        </div>
+                        <div class="stat-widget trains">
+                            <div class="stat-icon text-secondary">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="13" y2="17"></line></svg>
+                            </div>
+                            <div class="stat-details">
+                                <h4>Platform Statuses</h4>
+                                <span class="stat-value">6 Active</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Waiting Halls occupancy status -->
+                    <div class="dashboard-block">
+                        <div class="block-header">
+                            <h3>Waiting Hall occupancy & Comfort Index</h3>
+                            <span class="text-muted" style="font-size: 0.8rem;">Dynamic Crowd Balancing Threshold: <strong>80%</strong></span>
+                        </div>
+                        <div class="halls-container" id="halls-list-grid">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Crowd Predictor AI Chart -->
+                    <div class="dashboard-block">
+                        <div class="block-header">
+                            <h3>AI-Based Passenger Crowd Forecast (24 Hours Projection)</h3>
+                            <span class="text-muted" style="font-size: 0.75rem;">Vertical line marks current system time</span>
+                        </div>
+                        <div style="background: #090c12; border-radius: var(--radius-md); padding: 1rem;">
+                            <canvas id="analytics-chart-canvas" width="700" height="240" style="width: 100%; height: 240px;"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Train scheduler list -->
+                    <div class="dashboard-block">
+                        <div class="block-header">
+                            <h3>Active Station Timetable & Platform Scheduling</h3>
+                        </div>
+                        <table class="train-scheduler-table" id="train-scheduler-table">
+                            <thead>
+                                <tr>
+                                    <th>Train No</th>
+                                    <th>Train Name</th>
+                                    <th>Route</th>
+                                    <th>Platform</th>
+                                    <th>Scheduled Departure</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- Right Sidebar Details (Revenue & Booking & Log Feed) -->
+                <div class="admin-side-col">
+                    
+                    <!-- Quick Ticket Booking simulator -->
+                    <div class="dashboard-block">
+                        <div class="block-header">
+                            <h3>Book Demo Passenger Ticket</h3>
+                        </div>
+                        <form id="admin-booking-form" class="d-flex flex-column gap-2">
+                            <div>
+                                <label style="font-size:0.75rem; color:#9ca3af; display:block; margin-bottom:4px;">Passenger Name</label>
+                                <input type="text" id="book-pass-name" class="form-input" placeholder="e.g. Ramesh Chandra" required>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div style="flex:1;">
+                                    <label style="font-size:0.75rem; color:#9ca3af; display:block; margin-bottom:4px;">Select Train</label>
+                                    <select id="book-train-select" class="form-input" required>
+                                        <option value="12626">12626 (Kerala Exp)</option>
+                                        <option value="12002">12002 (Bhopal Shatabdi)</option>
+                                        <option value="12424">12424 (Rajdhani Exp)</option>
+                                        <option value="14006">14006 (Lichchavi Exp)</option>
+                                        <option value="22416">22416 (AP Exp)</option>
+                                    </select>
+                                </div>
+                                <div style="flex:1;">
+                                    <label style="font-size:0.75rem; color:#9ca3af; display:block; margin-bottom:4px;">Class Tier</label>
+                                    <select id="book-class-select" class="form-input" required>
+                                        <option value="Executive">Executive Lounge</option>
+                                        <option value="Sleeper">Sleeper Coach</option>
+                                        <option value="General">General Waiting</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:#9ca3af; display:block; margin-bottom:4px;">Ticket Print Format</label>
+                                <select id="book-type-select" class="form-input" required>
+                                    <option value="Mobile">Mobile QR Ticket (Online)</option>
+                                    <option value="Printed">Printed QR Ticket (Offline Kiosk)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="form-btn-primary" style="margin-top: 5px;">Book & Allocate Waiting Hall</button>
+                        </form>
+                    </div>
+
+                    <!-- Revenue Breakdown analytics chart -->
+                    <div class="dashboard-block">
+                        <div class="block-header">
+                            <h3>Station Revenue Streams</h3>
+                        </div>
+                        <div class="d-flex gap-2" style="height: 140px; padding: 10px 0;">
+                            <!-- Vertical bar charts -->
+                            <div class="chart-wrapper" style="height:100%; padding:0; gap:12%;">
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar-fill" id="rev-bar-ad" style="height: 0%; background:var(--primary);" data-val="$0"></div>
+                                    <span class="chart-bar-label">Ads</span>
+                                </div>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar-fill" id="rev-bar-rent" style="height: 0%; background:var(--secondary);" data-val="$0"></div>
+                                    <span class="chart-bar-label">Rent</span>
+                                </div>
+                                <div class="chart-bar-container">
+                                    <div class="chart-bar-fill" id="rev-bar-vending" style="height: 0%; background:var(--accent);" data-val="$0"></div>
+                                    <span class="chart-bar-label">Vending</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Detailed Text fields -->
+                            <div class="revenue-breakdown-list" style="flex:1.2; justify-content:center;">
+                                <div class="revenue-item" style="padding: 4px 8px; font-size:0.8rem;">
+                                    <div>Ads Rev</div>
+                                    <strong id="rev-ad-total">$0.00</strong>
+                                </div>
+                                <div class="revenue-item shop" style="padding: 4px 8px; font-size:0.8rem;">
+                                    <div>Shops Comm</div>
+                                    <strong id="rev-rent-total">$0.00</strong>
+                                </div>
+                                <div class="revenue-item vending" style="padding: 4px 8px; font-size:0.8rem;">
+                                    <div>Vending Rev</div>
+                                    <strong id="rev-vending-total">$0.00</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Ad Registry manager -->
+                    <div class="dashboard-block">
+                        <div class="block-header">
+                            <h3>Ad Campaigns Impressions</h3>
+                        </div>
+                        <div class="ad-manager-list" id="admin-ads-list">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Real-time Station Logger -->
+                    <div class="dashboard-block">
+                        <div class="block-header">
+                            <h3>System Event Logs</h3>
+                        </div>
+                        <div class="live-activity-logger" id="admin-log-feed">
+                            <p class="log-placeholder" style="color: #9ca3af; font-style:italic;">No events captured. Scan tickets or purchase items to seed activities...</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             VIEW 2: PASSENGER SIMULATOR (PHONE + PRINTED TICKET)
+             ========================================================================== -->
+        <div class="app-view-panel" id="view-passenger">
+            <div style="margin-bottom: 1.5rem; text-align: center;">
+                <label style="font-weight: 500; font-family: var(--font-heading); margin-right: 8px;">Select Passenger Profile to Simulate:</label>
+                <select id="passenger-select-profile" class="form-input" style="width: auto; display: inline-block;">
+                    <!-- Options injected dynamically by JS -->
+                </select>
+            </div>
+
+            <div class="passenger-layout">
+                
+                <!-- iPhone Frame Container -->
+                <div class="smartphone-container">
+                    <div class="smartphone-island"><div class="island-camera"></div></div>
+                    
+                    <!-- Notification Banner inside phone -->
+                    <div id="phone-notification-banner" style="display:none; position:absolute; top:35px; left:10px; right:10px; background:rgba(15, 23, 42, 0.95); border:1px solid var(--secondary); border-radius:12px; padding:10px; color:#fff; z-index:999; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+                        <div style="display:flex; justify-content:space-between; align-items:start;">
+                            <strong id="phone-notify-title" style="font-size:0.8rem; color:var(--secondary);">Alert</strong>
+                            <button onclick="dismissPhoneNotification()" style="background:none; border:none; color:#9ca3af; cursor:pointer; font-size:0.75rem;">✕</button>
+                        </div>
+                        <p id="phone-notify-text" style="font-size:0.75rem; margin-top:4px; line-height:1.3;"></p>
+                    </div>
+
+                    <div class="smartphone-screen">
+                        
+                        <!-- Phone top branding -->
+                        <div class="phone-header">
+                            <div class="irctc-logo-phone">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="var(--secondary)"><path d="M12 2L2 22h20L12 2z"></path></svg>
+                                Smart<span>Rail</span>
+                            </div>
+                            <span style="font-size:0.7rem; color:#9ca3af; background:rgba(255,255,255,0.06); padding:2px 8px; border-radius:20px;">IRCTC Portal</span>
+                        </div>
+
+                        <!-- Ticket boarding pass card -->
+                        <div class="phone-card" style="padding: 0; overflow:hidden;">
+                            <div class="phone-ticket">
+                                <div class="justify-between d-flex align-center">
+                                    <span class="ticket-pnr" id="phone-pass-pnr">PNR-4829103</span>
+                                    <span style="font-size:0.75rem; font-weight:700; color:#fff;" id="phone-pass-seat">H1 / SEAT 12</span>
+                                </div>
+                                <div class="station-route">
+                                    <div>
+                                        <div class="station-code">NDLS</div>
+                                        <div style="font-size: 0.65rem; color:#9ca3af;">NEW DELHI</div>
+                                    </div>
+                                    <div class="station-dot-line"></div>
+                                    <div style="text-align: right;">
+                                        <div class="station-code">TVC</div>
+                                        <div style="font-size: 0.65rem; color:#9ca3af;">TRIVANDRUM</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="phone-ticket-bottom">
+                                <div class="qr-code-holder">
+                                    <canvas id="phone-qr-canvas" width="120" height="120"></canvas>
+                                </div>
+                                <div style="text-align: center; width: 100%;">
+                                    <div style="font-size:0.65rem; color:#9ca3af; text-transform:uppercase;">Passenger Name</div>
+                                    <strong style="color:#fff; font-size:0.9rem;" id="phone-pass-name">Rajesh Kumar</strong>
+                                    
+                                    <div style="margin-top:8px; display:grid; grid-template-columns:1fr 1fr; gap:8px; text-align:left;">
+                                        <div>
+                                            <span style="font-size:0.6rem; color:#9ca3af; display:block;">ALLOCATED HALL</span>
+                                            <strong style="color:var(--secondary); font-size:0.75rem;" id="phone-pass-hall">Waiting Hall A</strong>
+                                        </div>
+                                        <div>
+                                            <span style="font-size:0.6rem; color:#9ca3af; display:block;">GATE STATUS</span>
+                                            <strong style="color:var(--success); font-size:0.75rem;" id="phone-pass-status">Booked</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live Train Tracking card -->
+                        <div class="phone-card">
+                            <h4 style="margin-bottom:6px; font-size:0.8rem; color:#fff;">Live Train Tracking</h4>
+                            <div class="justify-between d-flex align-center" style="font-size:0.75rem; margin-bottom:4px;">
+                                <span id="phone-pass-train">--</span>
+                                <span>Platform: <strong class="text-success" id="phone-pass-platform">PF-2</strong></span>
+                            </div>
+                            <div id="phone-train-status-text" style="font-size:0.72rem; color:#9ca3af;">--</div>
+                        </div>
+
+                        <!-- Pathfinding Map direction card -->
+                        <div class="phone-card">
+                            <h4 style="margin-bottom:6px; font-size:0.8rem; color:#fff;">Allocated Waiting Lounge Map</h4>
+                            <div class="station-navigator">
+                                <div class="map-grid">
+                                    <div class="map-pin" id="phone-map-pin"></div>
+                                </div>
+                                <div class="map-text">Route directions from Main Entry Gate</div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Navigation items -->
+                        <div class="smartphone-tabs">
+                            <button class="phone-tab-btn active">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M12 2v9"></path></svg>
+                                Ticket
+                            </button>
+                            <button class="phone-tab-btn" onclick="switchAppView('view-vending', document.querySelectorAll('.nav-tab-btn')[4])">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="5" y1="8" x2="19" y2="8"></line></svg>
+                                Food/Shop
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Offline A4 Printed ticket simulator -->
+                <div>
+                    <h3 style="font-family:var(--font-heading); margin-bottom:12px;">Printed QR Ticket (Offline Passenger)</h3>
+                    <div class="printed-ticket-simulator">
+                        <div style="border-bottom: 2px solid #1a1a1a; padding-bottom: 8px; margin-bottom: 12px; text-align: center;">
+                            <h2 style="color:#111827; font-size:1.3rem;">INDIAN RAILWAYS</h2>
+                            <p style="font-size:0.75rem; letter-spacing:1px; color:#555;">BOARDING PASS & GATE ENTRY AUTHORIZATION</p>
+                        </div>
+                        
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; font-size:0.8rem; line-height:1.6;">
+                            <div>
+                                <div>PNR NUMBER: <strong id="print-pnr">--</strong></div>
+                                <div>PASSENGER: <strong id="print-name">--</strong></div>
+                                <div>TRAIN NO/NAME: <strong id="print-train">--</strong></div>
+                                <div>DATE: <strong id="print-date">10/06/2026</strong></div>
+                            </div>
+                            <div>
+                                <div>CLASS TIER: <strong id="print-class">--</strong></div>
+                                <div>COACH/SEAT: <strong id="print-seat">--</strong></div>
+                                <div>ALLOCATED HALL: <strong id="print-hall">--</strong></div>
+                                <div>STATION ENTRY: <strong>VALID 4H PRIOR</strong></div>
+                            </div>
+                        </div>
+
+                        <div style="border-top: 1px dashed #ccc; margin-top: 15px; padding-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                            <div class="qr-code-holder" style="border: 2px solid #111;">
+                                <canvas id="print-qr-canvas" width="120" height="120"></canvas>
+                            </div>
+                            <span style="font-size:0.7rem; color:#555;">Scan this QR at Turnstile entry gates to check-in</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             VIEW 3: SMART ENTRY/EXIT GATES
+             ========================================================================== -->
+        <div class="app-view-panel" id="view-gates">
+            <div class="gates-layout">
+                
+                <!-- Entry Gate Simulator -->
+                <div class="gate-console" id="gate-console-entry">
+                    <h3>Smart Access Gate Simulator</h3>
+                    <span class="text-muted" style="font-size:0.8rem; text-align:center;">Validates QR credentials and controls passenger check-in.</span>
+
+                    <!-- Flapper barrier physical animation layout -->
+                    <div class="gate-physical-visualizer" id="gate-card-entry">
+                        <div class="gate-status-indicator"></div>
+                        <div class="gate-flapper left"></div>
+                        <div class="gate-flapper right"></div>
+                        <div class="gate-scanner-glass"></div>
+                        
+                        <!-- Overlay approval text -->
+                        <div class="scan-alert-overlay" id="scan-result-entry" style="display: none;"></div>
+                    </div>
+
+                    <!-- Scan Trigger Controller -->
+                    <div class="gate-passenger-selector d-flex flex-column gap-2">
+                        <div class="nav-selector" style="width: 100%;">
+                            <button class="nav-tab-btn active" id="gate-tab-entry" style="flex:1; justify-content:center;" onclick="setGateDirection('entry')">Entry Scanner</button>
+                            <button class="nav-tab-btn" id="gate-tab-exit" style="flex:1; justify-content:center;" onclick="setGateDirection('exit')">Exit Scanner</button>
+                        </div>
+
+                        <div>
+                            <label style="font-size:0.75rem; color:#9ca3af; display:block; margin-bottom:4px;">Select ticket QR to scan:</label>
+                            <select id="gate-pnr-selector" class="form-input">
+                                <!-- Populated dynamically by JS -->
+                            </select>
+                        </div>
+
+                        <button class="form-btn-primary" style="background:var(--secondary); font-family:var(--font-heading); font-weight:700;" onclick="executeGateScanSimulation()">
+                            SCAN CREDENTIALS AT TURNSTILE
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Technical Operations Panel -->
+                <div class="gate-console" style="align-items: stretch; gap:1.25rem;">
+                    <h3>Smart Gate Logs & Status</h3>
+                    
+                    <div class="glass-panel" style="padding: 1.25rem; display:flex; flex-direction:column; gap:0.75rem;">
+                        <h4 style="color: var(--secondary);">Operational Gate Parameters:</h4>
+                        <ul style="padding-left:1.25rem; font-size:0.85rem; display:flex; flex-direction:column; gap:0.5rem; color:#d1d5db;">
+                            <li><strong>Entry Timing Limit:</strong> Allowed within 4 hours of Departure.</li>
+                            <li><strong>Double-Scan Blocker:</strong> Passenger tickets already checked-in cannot re-enter.</li>
+                            <li><strong>Wait Hall Auto-balancing:</strong> If designated lounge has >80% crowd, redirect and update barcode data.</li>
+                            <li><strong>Evacuation Fail-Safe:</strong> Triggering sirens immediately unlocks all gates, bypassing check-in records.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             VIEW 4: PUBLIC STATIONS DISPLAY
+             ========================================================================== -->
+        <div class="app-view-panel" id="view-billboard">
+            <div class="billboard-grid">
+                
+                <!-- Timetable Panel -->
+                <div class="display-monitor">
+                    <div class="billboard-header">
+                        <h2>RAILWAY DEPARTURE BOARD</h2>
+                        <span style="font-family:monospace; color:#fff;" id="billboard-clock">14:00</span>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;" id="public-board-table">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--secondary); height: 40px;">
+                                <th style="color: var(--secondary); padding: 0.5rem;">TRAIN NO</th>
+                                <th style="color: var(--secondary); padding: 0.5rem;">TRAIN NAME</th>
+                                <th style="color: var(--secondary); padding: 0.5rem;">ROUTE</th>
+                                <th style="color: var(--secondary); padding: 0.5rem;">PLATFORM</th>
+                                <th style="color: var(--secondary); padding: 0.5rem;">DEP TIME</th>
+                                <th style="color: var(--secondary); padding: 0.5rem;">REMARKS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Waiting Hall status panel + Digital Ads Rotator -->
+                <div class="d-flex flex-column gap-3">
+                    
+                    <!-- Hall display -->
+                    <div class="display-monitor" style="padding: 1rem;">
+                        <div class="billboard-header" style="background:#1f2937; margin:-1rem -1rem 1rem -1rem;">
+                            <h3>WAITING LOUNGES STATUS</h3>
+                        </div>
+                        <div class="d-flex flex-column gap-2" id="public-board-halls">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Digital Ad board -->
+                    <div class="display-monitor" style="padding: 1rem; flex-grow:1; display:flex; flex-direction:column;">
+                        <div class="billboard-header" style="background:#d946ef; margin:-1rem -1rem 1rem -1rem; box-shadow: 0 0 10px rgba(217,70,239,0.3);">
+                            <h3>DIGITAL AD BOARD</h3>
+                        </div>
+                        <div class="digital-ad-marquee" id="public-ad-banner" style="background:#b91c1c; flex-grow:1; transition: background-color 0.8s ease;">
+                            <div class="ad-display-tag">Sponsored Ad</div>
+                            <div id="public-ad-text" style="color: #fff; text-align: center; padding: 1.5rem; text-shadow:0 2px 4px rgba(0,0,0,0.5);">
+                                <h3>Coca-Cola Summer Chill</h3>
+                                <p>Refresh your journey with ice-cold Coca-Cola!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             VIEW 5: VENDING & SHOPPING ZONE
+             ========================================================================== -->
+        <div class="app-view-panel" id="view-vending">
+            <div class="kiosk-grid">
+                
+                <!-- Smart Vending machine -->
+                <div class="vending-machine-ui">
+                    <div class="justify-between d-flex align-center" style="border-bottom: 2px solid #374151; padding-bottom:0.5rem;">
+                        <h3 style="color: var(--secondary);">Vending Express</h3>
+                        <span style="font-size:0.75rem; color:#9ca3af;">PF-1 Vending Terminal</span>
+                    </div>
+
+                    <!-- Items Rack Grid -->
+                    <div class="vending-rack">
+                        <div class="vending-slot" onclick="purchaseVendingSnack('Mineral Water', 20.00)">
+                            <svg viewBox="0 0 24 24" width="36" height="36" stroke="var(--secondary)" stroke-width="1.5" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                            <span style="font-size:0.75rem; font-weight:600;">Water Bottle</span>
+                            <span class="vending-price">$20.00</span>
+                        </div>
+                        <div class="vending-slot" onclick="purchaseVendingSnack('Potato Chips', 40.00)">
+                            <svg viewBox="0 0 24 24" width="36" height="36" stroke="var(--accent)" stroke-width="1.5" fill="none"><circle cx="12" cy="12" r="10"></circle></svg>
+                            <span style="font-size:0.75rem; font-weight:600;">Potato Chips</span>
+                            <span class="vending-price">$40.00</span>
+                        </div>
+                        <div class="vending-slot" onclick="purchaseVendingSnack('Masala Chai', 15.00)">
+                            <svg viewBox="0 0 24 24" width="36" height="36" stroke="var(--warning)" stroke-width="1.5" fill="none"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg>
+                            <span style="font-size:0.75rem; font-weight:600;">Masala Chai</span>
+                            <span class="vending-price">$15.00</span>
+                        </div>
+                        <div class="vending-slot" onclick="purchaseVendingSnack('Club Sandwich', 90.00)">
+                            <svg viewBox="0 0 24 24" width="36" height="36" stroke="var(--success)" stroke-width="1.5" fill="none"><polygon points="3 20 21 20 12 4 3 20"></polygon></svg>
+                            <span style="font-size:0.75rem; font-weight:600;">Club Sandwich</span>
+                            <span class="vending-price">$90.00</span>
+                        </div>
+                        <div class="vending-slot" onclick="purchaseVendingSnack('Fruit Juice', 50.00)">
+                            <svg viewBox="0 0 24 24" width="36" height="36" stroke="#fb7185" stroke-width="1.5" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                            <span style="font-size:0.75rem; font-weight:600;">Fruit Juice</span>
+                            <span class="vending-price">$50.00</span>
+                        </div>
+                        <div class="vending-slot" onclick="purchaseVendingSnack('Chocolate Bar', 30.00)">
+                            <svg viewBox="0 0 24 24" width="36" height="36" stroke="#a78bfa" stroke-width="1.5" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+                            <span style="font-size:0.75rem; font-weight:600;">Chocolate Bar</span>
+                            <span class="vending-price">$30.00</span>
+                        </div>
+                    </div>
+
+                    <div style="background:#090c12; padding:0.75rem; border-radius:6px; font-size:0.75rem; color:#9ca3af; text-align:center; border:1px dashed #374151;">
+                        ℹ Click item block to simulate purchase. Transaction triggers instant revenue increment in the Admin Console.
+                    </div>
+                </div>
+
+                <!-- Food Plaza & Retail Stores order simulation -->
+                <div class="vending-machine-ui" style="background:var(--bg-surface); border-color:var(--border-color);">
+                    <div style="border-bottom: 2px solid #374151; padding-bottom:0.5rem; margin-bottom:1rem;">
+                        <h3>Station Shopping Zone</h3>
+                        <p class="text-muted" style="font-size:0.75rem;">Simulate passenger purchases in commercial retail outlets.</p>
+                    </div>
+
+                    <!-- Shop 1: Chai Point -->
+                    <div class="glass-panel" style="padding:1rem; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong>Chai Point (Food Stall)</strong>
+                            <div style="font-size:0.75rem; color:#9ca3af;">Commission Rate: 8% on sales</div>
+                        </div>
+                        <button class="form-btn-primary" style="background:var(--warning);" onclick="purchaseShopFood('shop-1', 250.00)">
+                            Order Meal ($250)
+                        </button>
+                    </div>
+
+                    <!-- Shop 2: Higginbothams Bookstall -->
+                    <div class="glass-panel" style="padding:1rem; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong>Higginbothams Bookstall</strong>
+                            <div style="font-size:0.75rem; color:#9ca3af;">Commission Rate: 5% on sales</div>
+                        </div>
+                        <button class="form-btn-primary" onclick="purchaseShopFood('shop-2', 150.00)">
+                            Buy Magazine ($150)
+                        </button>
+                    </div>
+
+                    <!-- Shop 3: IRCTC Food Plaza -->
+                    <div class="glass-panel" style="padding:1rem; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong>IRCTC Food Plaza (Restaurant)</strong>
+                            <div style="font-size:0.75rem; color:#9ca3af;">Commission Rate: 10% on sales</div>
+                        </div>
+                        <button class="form-btn-primary" style="background:var(--success);" onclick="purchaseShopFood('shop-3', 600.00)">
+                            Order Thali ($600)
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Train Delay configuration pop-up modal -->
+    <div class="delay-config-modal-backdrop" id="delay-config-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:9999; align-items:center; justify-content:center;">
+        <div class="glass-panel" style="width:320px; padding:1.5rem; background:var(--bg-surface-elevated); border-color:#2f3b52;">
+            <h3 style="margin-bottom:0.5rem; color:#fff;">Modify Train Schedule</h3>
+            <p style="font-size:0.8rem; color:#9ca3af; margin-bottom:1rem;">Train No: <strong id="modal-train-no" style="color:var(--secondary);">--</strong> (<span id="modal-train-name">--</span>)</p>
+            
+            <div style="margin-bottom:1rem;">
+                <label style="font-size:0.75rem; color:#d1d5db; display:block; margin-bottom:4px;">Delayed Minutes</label>
+                <input type="number" id="modal-delay-input" class="form-input" min="0" max="480" value="0">
+            </div>
+
+            <div class="d-flex justify-between" style="gap:10px;">
+                <button class="form-btn-primary" style="background:#374151; flex:1;" onclick="closeDelayModal()">Cancel</button>
+                <button class="form-btn-primary" style="flex:1;" onclick="submitDelayUpdate()">Save Delay</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Footer -->
+    <footer style="margin-top:4rem; border-top: 1px solid var(--border-color); padding: 1.5rem 0; text-align:center; font-size:0.8rem; color:#4b5563;">
+        <div class="max-width:1600px; margin: 0 auto; padding: 0 1.5rem;">
+            <p>&copy; 2026 SmartRail Hub. Developed for Indian Railways Passenger Management & Revenue Generation Console.</p>
+            <p style="margin-top:0.4rem; color:#374151;">Secure local storage enabled. All simulated events persist locally.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
